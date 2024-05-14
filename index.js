@@ -98,10 +98,10 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     const filter = { userId: _id };
     if (from || to) filter.date = dateFilter;
 
-    let exercises = Exercise.find(filter).select('description duration date');
-    if (limit) exercises = exercises.limit(parseInt(limit));
+    let query = Exercise.find(filter).select('description duration date');
+    if (limit) query = query.limit(parseInt(limit));
 
-    exercises = await exercises.exec();
+    const exercises = await query.exec();
 
     res.json({
       username: user.username,
@@ -117,6 +117,7 @@ app.get('/api/users/:_id/logs', async (req, res) => {
     res.status(500).json({ error: 'Error fetching logs' });
   }
 });
+
 
 const listener = app.listen(process.env.PORT || 3000, () => {
   console.log('Your app is listening on port ' + listener.address().port);
